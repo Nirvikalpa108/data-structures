@@ -9,7 +9,7 @@ class Node(object):
         return str(self.data)
 
 # class for the singly linked list
-class SingleLinkedList(object):
+class SinglyLinkedList(object):
     # __init__ function
     def __init__(self):
         self.head = None
@@ -118,7 +118,7 @@ class SingleLinkedList(object):
         # is this current value, the one that 
         pass
 
-myList = SingleLinkedList()
+myList = SinglyLinkedList()
 myList.prepend(3)
 myList.prepend(2)
 myList.prepend(2)

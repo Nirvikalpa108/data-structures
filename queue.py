@@ -52,9 +52,8 @@ class Queue(object):
     def isEmpty(self):
         return not self.head #Amina, try to remember this syntax
 
-    def size(self):
-        return self.size # QUESTION - I feel like this function isn't actually being called
-        # It says INT object is not callable?
+    def size(self): # this isn't actually being called right now, it's just calling the field. so change one of the names (method or field)
+        return self.size 
 
 newQueue = Queue()
 print(newQueue)
