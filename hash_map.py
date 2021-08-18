@@ -1,45 +1,52 @@
-from singly_linked_list import SinglyLinkedList
+from hash_map_singly_linked_list import HashMapLinkedList
 # helpful documentation: https://www.interviewcake.com/concept/java/hash-map
-# def __init__(self) - set the size of the array
-# def get_hash(self, key) - takes a key and generates an appropriate index to assign that key
-# def add(self, key, value) - adds a value to a key (calls the get_hash function)
-# def get(self, key) - gets a value (or values?) - calls get_hash
-# def delete(self, key) - delete a key 
-# def keys(self) - list all the keys
 
+# HashMap needs its own Node implementation in singly linked list - HashMapLinkedList
 
-# HashSet has keys, no values
-class HashSet(object):
+class HashMap(object):
     def __init__(self, capacity):
-        array = [] # pretending this is an array with a fixed size. use the ctypes library later to implement from scratch.
+        array = [] # pretending this is an array with a fixed size
         self.capacity = capacity
-    
+
     # turn key into a number between 0 and capacity    
-    # make an assumption about the type of key (int perhaps. we could always use python's hash function to turn x into an int)
-    # easiest hash function - hash(key) % capacity (https://www.programiz.com/python-programming/methods/built-in/hash)
+    # remember - each key must be unique
     def get_hash(self, key):
-        pass
-    
-    def add(self, key):
+        hash(key) % self.capacity # https://www.programiz.com/python-programming/methods/built-in/hash
+
+    # add a key value pair
+    def add(self, key, value):
         index = self.get_hash(key)
-        if not self.array[index]: # if value at this index is None
-            self.array[index] = SinglyLinkedList() # Q - in the interview, which linked list implementation should I use? (I can't see an appropriate python one)
-        self.array[index].append(key)
+        if not self.array[index]: # if value at index is None
+            self.array[index] = HashMapLinkedList() # create a new linked list to manage hash collisions
+        self.array[index].append(key, value)
 
     # returns a boolean
     def contains(self, key):
-        # apply hash function to key to get the index
         index = self.get_hash(key)
-        # if there's nothing at that index, return false
-        return self.array[index]
+        if not self.array[index]: # if there's nothing at the index, then there's nothing to delete
+            return False
+        else:
+            self.array[index].find(key) # the find function should output True 
 
+    # output the value assigned to that key
+    # once I've got the key Node, just call .value on it
+    def get_value(self, key):
+        index = self.get_hash(key)
+        if not self.array[index]: # if there's no key in the array at that index, return 
+            return
+        else:
+            self.array[index].value(key) # implement this function in HashMapLinkedList which takes a key and outputs its value 
+
+    # delete the whole Node
+    # return boolean (or value that corresponded to the key) or None if it wasn't there at all
     def delete(self, key):
-        # apply hash function to key to get the index
         index = self.get_hash(key)
-        # delete the key at that index
-        self.delete(index) # does this work?!
+        if not self.array[index]:
+            return False # if there's no key at that index, return False
+        else:
+            self.array[index].delete(key)
 
-    # Q - double check it's ok for me to use all these built in array methods?
-
-    # 
+    # QUESTION
+    # might be a silly question but in each array element we've initialised a HashMapLinkedList if there's a key present
+    # so when we call array[index] we can call our HashMapLinkedList methods directly on that array element?
 
