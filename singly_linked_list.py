@@ -49,7 +49,8 @@ class SinglyLinkedList(object):
             return False 
         
         currentEl = self.head
-        while currentEl.next and currentEl.data != value: # if a CurrentEl.next exists AND the currentEl does not equal the value we're looking for, keep looping
+        # if a CurrentEl.next exists AND the currentEl does not equal the value we're looking for, keep looping
+        while currentEl.next and currentEl.data != value: 
             currentEl = currentEl.next
         return currentEl.data == value 
 
@@ -96,8 +97,8 @@ class SinglyLinkedList(object):
         current = self.head
         prev = None
 
-        # if the head equals the value we want to delete, we need to re-assign the head of our linked list
-        if current.data == value: # do I also need to check somehwere that we are not dealing with an empty list?
+        # if the head equals the value to delete, re-assign the head of the linked list
+        if current.data == value: # do I need to check we're not dealing with an empty list?
             next = current.next # get the next value along
             current.next = None #unhook the pointer
             self.head = next # set the new head of the list
