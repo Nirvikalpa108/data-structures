@@ -1,7 +1,5 @@
-# can't print - how to test?
-    # different ways of walking the tree 
-        # in order - print all left children and then print all right
-        # pre and post order too
+# traversals: https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
+# https://www.freecodecamp.org/news/all-you-need-to-know-about-tree-data-structures-bceacb85490c/ 
 
 class Node(object):
     def __init__(self, data, left=None, right=None):
@@ -22,6 +20,7 @@ class BinaryTree(object):
     def add(self, value):
         if not self.root:
             self.root = Node(value)
+            return
         parent = self.root
         while True: # this will loop until we return out 
             if value < parent.data:
@@ -38,7 +37,35 @@ class BinaryTree(object):
                     return 
             else:
                 raise ValueError("no duplicate values allowed") 
+    
+    def print_in_order(self):
+        if self.left:
+            self.left.print_in_order()
+        print(self.data)
+        if self.right:
+            self.right.print_in_order()
 
-# h/w - try an in-order print of the tree on the jordan jamboard
+    def print_pre_order(self):
+        print(self.data)
+        if self.left:
+            self.left.print_pre_order()
+        if self.right:
+            self.right.print_pre_order()
+
+    def print_post_order(self):
+        if self.left:
+            self.left.print_post_order()
+        if self.right:
+            self.right.print_post_order()
+        print(self.data)
+
+myTree = BinaryTree()
+myTree.add(1)
+myTree.print_pre_order()
+# this isn't working right now, I need to figure out why
+
+
+
+
 
 
