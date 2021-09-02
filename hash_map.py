@@ -49,4 +49,5 @@ class HashMap(object):
     # QUESTION
     # might be a silly question but in each array element we've initialised a HashMapLinkedList if there's a key present
     # so when we call array[index] we can call our HashMapLinkedList methods directly on that array element?
+    # could we write some tests for this now that the has map singly linked list is done?
 
