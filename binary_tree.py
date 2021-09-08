@@ -84,15 +84,45 @@ class BinaryTree(object):
             else: 
                 return True 
         return False # current is equal to None, we've reached end of tree
+
     
-    # h/w - find an image (video?) of deleting a Node in a tree
+    # 9/9/21 - I watched a video on deletion and read about it
+    # I tried the iterative traversals by myself and then i saw that they all use a stack. i haven't implemented it with a stack yet
+
     # re-write the traversal functions using iterative methods on the tree (similar to find)
+    # here are the iterative implementations I found online. They all use a stack.
+    # https://www.techiedelight.com/inorder-tree-traversal-iterative-recursive/
+    # https://www.techiedelight.com/preorder-tree-traversal-iterative-recursive/ 
+    # https://www.techiedelight.com/postorder-tree-traversal-iterative-recursive/ 
+
+    # this is what I was initially thinking before I googled
+    def print_in_order(self): 
+        current = self.root
+        while current != None:
+            result = ""
+            if current.left:
+                result + str(current.left)
+            result + str(current.data)
+            if current.right:
+                result + str(current.right)
+        return result 
+
+    # h/w - find an image (video?) of deleting a Node in a tree
+    # https://www.youtube.com/watch?v=i2s4Tyw3_dY
+    # https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
+    # The worst case time complexity of delete operation is O(h) where h is the height of the Binary Search Tree. In worst case, we may have to travel from the root to the deepest leaf node. The height of a skewed tree may become n and the time complexity of delete operation may become O(n)
+    # the basic idea for delete is that there are three possibilities
+    # I am a leaf node - just delete me, no big deal
+    # I have one child node - copy single child to node and then delete
+    # I have two children - find out which node should replace it, could be below the children too. Copy it to node and then delete.
+    # what does this mean??? The important thing to note is, inorder successor is needed only when the right child is not empty. In this particular case, inorder successor can be obtained by finding the minimum value in the right child of the node.
 
 myTree = BinaryTree()
 myTree.add(2)
 myTree.add(1)
 myTree.add(3)
 myTree.root.print_in_order()
+myTree.print_in_order()
 
 
 
