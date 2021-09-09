@@ -2,10 +2,11 @@
 # https://www.freecodecamp.org/news/all-you-need-to-know-about-tree-data-structures-bceacb85490c/ 
 
 class Node(object):
-    def __init__(self, data, left=None, right=None):
+    def __init__(self, data, left=None, right=None, parent=None):
         self.data = data
         self.left = left
         self.right = right
+        self.parent = parent
 
     def __str__(self):
         return str(self.data)
@@ -43,6 +44,10 @@ class Node(object):
         if self.right:
             self.right.print_post_order()
         print(self.data)
+    
+    def isLeaf(self):
+        # this returns True if the Node doesn't have a left and right child
+        return not self.left and not self.right
 
 class BinaryTree(object):
     def __init__(self):
@@ -54,20 +59,21 @@ class BinaryTree(object):
     def add(self, value):
         if not self.root:
             self.root = Node(value)
+            self.root.parent = None
             return
-        parent = self.root
+        currentParent = self.root # we have a root, so we can make it a parent
         while True: # this will loop until we return out 
-            if value < parent.data:
-                if parent.left:
-                    parent = parent.left
+            if value < currentParent.data:
+                if currentParent.left:
+                    currentParent = currentParent.left
                 else: # if left child is None
-                    parent.left = Node(value)
+                    currentParent.left = Node(value, parent=currentParent)
                     return
-            elif value > parent.data:
-                if parent.right:
-                    parent = parent.right
+            elif value > currentParent.data:
+                if currentParent.right:
+                    currentParent = currentParent.right
                 else: 
-                    parent.right = Node(value)
+                    currentParent.right = Node(value, parent=currentParent)
                     return 
             else:
                 raise ValueError("no duplicate values allowed") 
@@ -86,8 +92,7 @@ class BinaryTree(object):
         return False # current is equal to None, we've reached end of tree
 
     
-    # 9/9/21 - I watched a video on deletion and read about it
-    # I tried the iterative traversals by myself and then i saw that they all use a stack. i haven't implemented it with a stack yet
+    # 9/9/21 - I tried the iterative traversals by myself and then i saw that they all use a stack. i haven't implemented it with a stack yet
 
     # re-write the traversal functions using iterative methods on the tree (similar to find)
     # here are the iterative implementations I found online. They all use a stack.
@@ -103,19 +108,64 @@ class BinaryTree(object):
             if current.left:
                 result + str(current.left)
             result + str(current.data)
+            current = current.left
             if current.right:
                 result + str(current.right)
+                current = current.right
         return result 
 
-    # h/w - find an image (video?) of deleting a Node in a tree
+    # 16/9/21 h/w - write stack implementations and discuss
+
+    # 9/9/21 h/w - find an image (video?) of deleting a Node in a tree
     # https://www.youtube.com/watch?v=i2s4Tyw3_dY
     # https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
-    # The worst case time complexity of delete operation is O(h) where h is the height of the Binary Search Tree. In worst case, we may have to travel from the root to the deepest leaf node. The height of a skewed tree may become n and the time complexity of delete operation may become O(n)
+    # The worst case time complexity of delete operation is O(h) where h is the height of the Binary Search Tree. 
+    # In worst case, we may have to travel from the root to the deepest leaf node. The height of a skewed tree may become n and the time complexity of delete operation may become O(n)
     # the basic idea for delete is that there are three possibilities
     # I am a leaf node - just delete me, no big deal
     # I have one child node - copy single child to node and then delete
     # I have two children - find out which node should replace it, could be below the children too. Copy it to node and then delete.
-    # what does this mean??? The important thing to note is, inorder successor is needed only when the right child is not empty. In this particular case, inorder successor can be obtained by finding the minimum value in the right child of the node.
+    # what does this mean??? The important thing to note is, inorder successor is needed only when the right child is not empty. 
+    # In this particular case, inorder successor can be obtained by finding the minimum value in the right child of the node.
+
+    # returns Node
+    def find_node(self, value):
+        current = self.root
+        while current != None:
+            if value < current.data:
+                current = current.left
+            elif value > current.data:
+                current = current.right
+            else: 
+                return current 
+        return None # current is equal to None, we've reached end of tree
+
+    def delete(self, value):
+        #determine where/what is this value
+        nodeToDelete = self.find_node(value) 
+        if not nodeToDelete: # if this is None, the tree is empty
+            return False
+        else:
+            # are you a leaf node?
+            if nodeToDelete.isLeaf():
+                # first, which child am I?
+                # delete me, no big deal
+                if nodeToDelete == nodeToDelete.parent.right:
+                    nodeToDelete.parent.right = None
+                else:
+                    nodeToDelete.parent.left = None
+            # do you have 1 child?
+            elif nodeToDelete.right and not nodeToDelete.left:
+                pass
+            elif nodeToDelete.left and not nodeToDelete.right:
+                pass
+            # do you have 2 children?
+            else:
+                pass
+        pass
+
+    # h/w definition of successor and predecessor
+    # add the function definitions with types they will return 
 
 myTree = BinaryTree()
 myTree.add(2)
