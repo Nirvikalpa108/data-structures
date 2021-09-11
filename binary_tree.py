@@ -146,10 +146,9 @@ class BinaryTree(object):
         if not nodeToDelete: # if this is None, the tree is empty
             return False
         else:
-            # are you a leaf node?
+            # are you a leaf node? delete me, no big deal
             if nodeToDelete.isLeaf():
                 # first, which child am I?
-                # delete me, no big deal
                 if nodeToDelete == nodeToDelete.parent.right:
                     nodeToDelete.parent.right = None
                 else:
@@ -165,7 +164,30 @@ class BinaryTree(object):
         pass
 
     # h/w definition of successor and predecessor
-    # add the function definitions with types they will return 
+    # https://algorithms.tutorialhorizon.com/inorder-predecessor-and-successor-in-binary-search-tree/
+    # it's just the next number (lower and higher) - and it's about finding that number so you can do the right replacement
+    # https://www.geeksforgeeks.org/inorder-predecessor-successor-given-key-bst/
+
+
+    # h/w - for delete, add the function definitions with types they will return 
+    # https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ 
+    # given a non-empty BST, search tree, return node with minimum key value. 
+    # find the leftmost leaf
+    # returns node
+    def min_value_node(node):
+        pass
+    # delete node and return new BST root
+    def delete(self, key):
+        # Base case - if root is None, return None
+        # if key to delete is smaller than root, then its in left subtree (recurse with the left child of root)
+        # if key to delete is greater than root, then its in right subtree (recurse with the right child of root)
+        # if key is same as root, then delete root node
+            # if node has one child or no child
+            # if node has two children, get inorder successor (call min_value_node to get smallest in right subtree)
+            # copy inorder successor to root
+            # delete inorder successor (use recursion)
+        pass
+
 
 myTree = BinaryTree()
 myTree.add(2)
