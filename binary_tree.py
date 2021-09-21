@@ -1,5 +1,22 @@
 # traversals: https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
 # https://www.freecodecamp.org/news/all-you-need-to-know-about-tree-data-structures-bceacb85490c/ 
+# https://algorithms.tutorialhorizon.com/inorder-predecessor-and-successor-in-binary-search-tree/
+# https://www.geeksforgeeks.org/inorder-predecessor-successor-given-key-bst/
+
+# delete function explanation
+# https://www.youtube.com/watch?v=i2s4Tyw3_dY
+# https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
+# The worst case time complexity of delete operation is O(h) 
+# where h is the height of the Binary Search Tree. 
+# In worst case, we may have to travel from the root to the deepest leaf node. 
+# The height of a skewed tree may become n and the time complexity of delete operation may become O(n)
+
+# a h/w for another day is to re-write the traversal functions using iterative methods on the tree (similar to find)
+# here are the iterative implementations I found online. They all use a stack.
+# https://www.techiedelight.com/inorder-tree-traversal-iterative-recursive/
+# https://www.techiedelight.com/preorder-tree-traversal-iterative-recursive/ 
+# https://www.techiedelight.com/postorder-tree-traversal-iterative-recursive/ 
+
 
 class Node(object):
     def __init__(self, data, left=None, right=None, parent=None):
@@ -91,43 +108,6 @@ class BinaryTree(object):
                 return True 
         return False # current is equal to None, we've reached end of tree
 
-    
-    # 9/9/21 - I tried the iterative traversals by myself and then i saw that they all use a stack. i haven't implemented it with a stack yet
-
-    # re-write the traversal functions using iterative methods on the tree (similar to find)
-    # here are the iterative implementations I found online. They all use a stack.
-    # https://www.techiedelight.com/inorder-tree-traversal-iterative-recursive/
-    # https://www.techiedelight.com/preorder-tree-traversal-iterative-recursive/ 
-    # https://www.techiedelight.com/postorder-tree-traversal-iterative-recursive/ 
-
-    # this is what I was initially thinking before I googled
-    def print_in_order(self): 
-        current = self.root
-        while current != None:
-            result = ""
-            if current.left:
-                result + str(current.left)
-            result + str(current.data)
-            current = current.left
-            if current.right:
-                result + str(current.right)
-                current = current.right
-        return result 
-
-    # 16/9/21 h/w - write stack implementations and discuss
-
-    # 9/9/21 h/w - find an image (video?) of deleting a Node in a tree
-    # https://www.youtube.com/watch?v=i2s4Tyw3_dY
-    # https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
-    # The worst case time complexity of delete operation is O(h) where h is the height of the Binary Search Tree. 
-    # In worst case, we may have to travel from the root to the deepest leaf node. The height of a skewed tree may become n and the time complexity of delete operation may become O(n)
-    # the basic idea for delete is that there are three possibilities
-    # I am a leaf node - just delete me, no big deal
-    # I have one child node - copy single child to node and then delete
-    # I have two children - find out which node should replace it, could be below the children too. Copy it to node and then delete.
-    # what does this mean??? The important thing to note is, inorder successor is needed only when the right child is not empty. 
-    # In this particular case, inorder successor can be obtained by finding the minimum value in the right child of the node.
-
     # returns Node
     def find_node(self, value):
         current = self.root
@@ -139,55 +119,91 @@ class BinaryTree(object):
             else: 
                 return current 
         return None # current is equal to None, we've reached end of tree
+    
+    # assuming there is a right child (see predecessor function for left child)
+    def successor(self, node):
+        if node.right:
+            return self.find_min(node.right)
+        else:
+            raise Exception # haven't implemented the case where there isn't a right child yet 
 
+
+    def find_min(self, node): # get minimum value from left children
+        current = node
+        while current.left:
+            current = current.left
+        return current  
+    
+    # assuming there is a left child
+    def predecessor(self, node):
+        if node.left:
+            return self.find_max(node.left)
+        else:
+            raise Exception # haven't implemented the case where there isn't a left child yet 
+
+    def find_max(self, node): # get max value from right children
+        current = node
+        while current.right:
+            current = current.right
+        return current  
+
+    # Q - what should this function return???? 
+    # (https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ returns root node or None, so could be a possibility)
     def delete(self, value):
         #determine where/what is this value
         nodeToDelete = self.find_node(value) 
-        if not nodeToDelete: # if this is None, the tree is empty
+        if not nodeToDelete: # if None, the tree is empty
             return False
         else:
             # are you a leaf node? delete me, no big deal
             if nodeToDelete.isLeaf():
-                # first, which child am I?
+                # but before I do that, which child am I?
                 if nodeToDelete == nodeToDelete.parent.right:
                     nodeToDelete.parent.right = None
                 else:
                     nodeToDelete.parent.left = None
             # do you have 1 child?
             elif nodeToDelete.right and not nodeToDelete.left:
-                pass
+                # find out what I am to my parent (am I the left or right child?)
+                # modify parent to point to the right child
+                if nodeToDelete == nodeToDelete.parent.right:
+                    nodeToDelete.parent.right = nodeToDelete.right
+                else:
+                    nodeToDelete.parent.left = nodeToDelete.right
             elif nodeToDelete.left and not nodeToDelete.right:
-                pass
-            # do you have 2 children?
+                # find out what I am to my parent (am I the left or right child?)
+                # modify parent to point to the left child
+                if nodeToDelete == nodeToDelete.parent.left:
+                    nodeToDelete.parent.left = nodeToDelete.left
+                else:
+                    nodeToDelete.parent.right = nodeToDelete.left
+            # do you have 2 children? Then return the successor.
             else:
-                pass
-        pass
-
-    # h/w definition of successor and predecessor
-    # https://algorithms.tutorialhorizon.com/inorder-predecessor-and-successor-in-binary-search-tree/
-    # it's just the next number (lower and higher) - and it's about finding that number so you can do the right replacement
-    # https://www.geeksforgeeks.org/inorder-predecessor-successor-given-key-bst/
-
-
-    # h/w - for delete, add the function definitions with types they will return 
-    # https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ 
-    # given a non-empty BST, search tree, return node with minimum key value. 
-    # find the leftmost leaf
-    # returns node
-    def min_value_node(node):
-        pass
-    # delete node and return new BST root
-    def delete(self, key):
-        # Base case - if root is None, return None
-        # if key to delete is smaller than root, then its in left subtree (recurse with the left child of root)
-        # if key to delete is greater than root, then its in right subtree (recurse with the right child of root)
-        # if key is same as root, then delete root node
-            # if node has one child or no child
-            # if node has two children, get inorder successor (call min_value_node to get smallest in right subtree)
-            # copy inorder successor to root
-            # delete inorder successor (use recursion)
-        pass
-
+                # find successor (the successor function assumes there is a right child)
+                sucessor = self.sucessor(nodeToDelete)
+                # if successor is direct right child of nodeToDelete,
+                if sucessor == nodeToDelete.right:
+                    # then, put it in place of the nodeToDelete (modify parent pointer)
+                    nodeToDelete.parent = sucessor
+                # else, successor is somewhere in the right subtree but not right child
+                else:
+                    # replace successor by its own right child
+                    sucessor = sucessor.right
+                    # replace nodeToDelete with successor
+                    nodeToDelete = sucessor
+    
+    # **** h/w 22/9/21 - finish delete function. let's go over this, read it through and test.
+    # h/w 22/9/21 - see if I can refactor delete to remove repitition (see below transplant)
+                
+    # define transplant (replaces one subtree with another) to cut down some code
+    # https://www.cs.dartmouth.edu/~thc/cs10/lectures/0428/0428.html
+    # In order to move subtrees around within the binary search tree, we use a helper method, transplant, 
+    # which replaces one subtree as a child of its parent with another subtree. 
+    # When transplant replaces the subtree rooted at node u with the subtree rooted at node v, 
+    # node u's parent becomes node v's parent, 
+    # and u's parent ends up having v as its appropriate child.
+    # **** o m g let's read this together because I don't understand this code 
+    
 
 myTree = BinaryTree()
 myTree.add(2)
