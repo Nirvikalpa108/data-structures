@@ -192,7 +192,7 @@ class BinaryTree(object):
                     # replace nodeToDelete with successor
                     nodeToDelete = sucessor
     
-    # **** h/w 22/9/21 - finish delete function. let's go over this, read it through and test.
+    # **** h/w 22/9/21 - I finished delete function. let's read it through and test.
     # h/w 22/9/21 - see if I can refactor delete to remove repitition (see below transplant)
                 
     # define transplant (replaces one subtree with another) to cut down some code
