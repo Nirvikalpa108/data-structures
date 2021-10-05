@@ -150,7 +150,7 @@ class BinaryTree(object):
     # Q - what should this function return???? 
     # (https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/ returns root node or None, so could be a possibility)
     def delete(self, value):
-        #determine where/what is this value
+        # find the Node by looking for its value in the tree
         nodeToDelete = self.find_node(value) 
         if not nodeToDelete: # if None, the tree is empty
             return False
@@ -178,13 +178,19 @@ class BinaryTree(object):
                 else:
                     nodeToDelete.parent.right = nodeToDelete.left
             # do you have 2 children? Then return the successor.
-            else:
+            else:              
                 # find successor (the successor function assumes there is a right child)
-                sucessor = self.sucessor(nodeToDelete)
+                sucessor = self.successor(nodeToDelete)
                 # if successor is direct right child of nodeToDelete,
                 if sucessor == nodeToDelete.right:
-                    # then, put it in place of the nodeToDelete (modify parent pointer)
-                    nodeToDelete.parent = sucessor
+                    # find out which child I am to my parent
+                    # if I was the left child to my parent,
+                    # then set my parent's left child to my successor
+                    if nodeToDelete == nodeToDelete.parent.left:
+                        nodeToDelete.parent.left = sucessor
+
+                    else:
+                        nodeToDelete.parent.right = sucessor
                 # else, successor is somewhere in the right subtree but not right child
                 else:
                     # replace successor by its own right child
@@ -192,25 +198,41 @@ class BinaryTree(object):
                     # replace nodeToDelete with successor
                     nodeToDelete = sucessor
     
-    # **** h/w 22/9/21 - I finished delete function. let's read it through and test.
-    # h/w 22/9/21 - see if I can refactor delete to remove repitition (see below transplant)
-                
-    # define transplant (replaces one subtree with another) to cut down some code
-    # https://www.cs.dartmouth.edu/~thc/cs10/lectures/0428/0428.html
-    # In order to move subtrees around within the binary search tree, we use a helper method, transplant, 
-    # which replaces one subtree as a child of its parent with another subtree. 
-    # When transplant replaces the subtree rooted at node u with the subtree rooted at node v, 
-    # node u's parent becomes node v's parent, 
-    # and u's parent ends up having v as its appropriate child.
-    # **** o m g let's read this together because I don't understand this code 
+    # https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
+    def deleteAgain(self, root, value):
+        # if the tree is empty or we don't find the value, return None
+        if not root:
+            return root
+        # looking for the value, go to the correct subtree
+        elif value < root.data:
+            root.left = self.deleteAgain(root.left, value)
+        elif value > root.data:
+            root.right = self.deleteAgain(root.right, value)
+        # now root is the node to delete
+        else:
+            #leaf
+            if root.isLeaf():
+                return None                
+            # 1 child - so we just need to return that child, just like above - sthg to do wth the recursion
+            # h/w 5/10 - finish delete function from here.
+
+            # 2 children
+
+
     
 
 myTree = BinaryTree()
 myTree.add(2)
 myTree.add(1)
-myTree.add(3)
+myTree.add(5)
+myTree.add(7)
+myTree.add(4)
 myTree.root.print_in_order()
-myTree.print_in_order()
+print("about to delete")
+myTree.delete(5)
+print("completed deletion, about to print again")
+myTree.root.print_in_order()
+print("completed print attempt")
 
 
 
