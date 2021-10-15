@@ -200,23 +200,43 @@ class BinaryTree(object):
     
     # https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/
     def deleteAgain(self, root, value):
-        # if the tree is empty or we don't find the value, return None
+        
+        # if the tree is empty OR we don't find the value, return None
         if not root:
             return root
-        # looking for the value, go to the correct subtree
+        
+        # now, we're looking for the subtree where the value is the root of that subtree
+        # if value is less than root, look in the left subtree
         elif value < root.data:
             root.left = self.deleteAgain(root.left, value)
+
+        # if value is greater than root, look in the right subtree   
         elif value > root.data:
             root.right = self.deleteAgain(root.right, value)
-        # now root is the node to delete
+        
+        # now we have found the right subtree and the root of it is the node to delete
         else:
-            #leaf
+            # it's a leaf - no children
             if root.isLeaf():
-                return None                
-            # 1 child - so we just need to return that child, just like above - sthg to do wth the recursion
-            # h/w 5/10 - finish delete function from here.
+                return None  
 
+            # 1 child - so we just need to return that child, just like above - sthg to do wth the recursion
+            # 2 conditions - left or right tree
+            elif not root.left:
+                root = root.right
+            
+            elif not root.right:
+                root = root.left
+            
             # 2 children
+            else:
+                # find the minimum value in the tree.
+                minValueOfRightSubtree = self.find_min(root)
+                # copy the minimum value to the root
+                root.value = minValueOfRightSubtree
+                # now delete the min value that has already been copied to root (we don't want the value occuring twice in the tree)
+                root.right = self.deleteAgain(root.right, minValueOfRightSubtree.value)
+        return root
 
 
     
