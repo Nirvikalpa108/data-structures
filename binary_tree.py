@@ -231,11 +231,11 @@ class BinaryTree(object):
             # 2 children
             else:
                 # find the minimum value in the tree.
-                minValueOfRightSubtree = self.find_min(root)
+                minNode = self.find_min(root.right)
                 # copy the minimum value to the root
-                root.value = minValueOfRightSubtree
+                root.data = minNode
                 # now delete the min value that has already been copied to root (we don't want the value occuring twice in the tree)
-                root.right = self.deleteAgain(root.right, minValueOfRightSubtree.value)
+                root.right = self.deleteAgain(root.right, minNode.data)
         return root
 
 
@@ -249,7 +249,7 @@ myTree.add(7)
 myTree.add(4)
 myTree.root.print_in_order()
 print("about to delete")
-myTree.delete(5)
+myTree.deleteAgain(myTree.root, 7)
 print("completed deletion, about to print again")
 myTree.root.print_in_order()
 print("completed print attempt")
