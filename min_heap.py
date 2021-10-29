@@ -21,9 +21,6 @@ class MinHeap(object):
     def __str__(self):
         return str(self.heapList)
     
-    def insert(self, value):
-        return self.heapList.append(value)
-    
     def get_left(self, index):
         return (index * 2) + 1
 
@@ -59,32 +56,75 @@ class MinHeap(object):
             self.heapList[index] = smallest
             self.min_heapify(smallestIndex)
     
-    # remove head and call min_heapify to re-order heap
+    # remove min value from heap and reassert heap rules
     def extract_min(self):
-        pass
+        minValue = self.heapList[0] 
+        lastIndex = self.heapSize - 1
+        # assigning last value to position 0
+        self.heapList[0] = self.heapList[lastIndex]
+        # reduce heap size 
+        self.heapSize = self.heapSize - 1
+        # delete copied leaf element 
+        del(self.heapList[lastIndex])
+        # now sort out the heap (the children already conform)
+        self.min_heapify(0)
+        return minValue
     
-    # *** I don't understand this one
-    # decrease key at index to new value 
-    # assumes that this is smaller than the existing value
+    # decrease key at index to new value and then assert heap rules
     def decrease_key(self, index, value):
-        pass
+        self.heapList[index] = value
+        child = self.heapList[index]
+        parent = self.heapList[self.get_parent(index)]  
+        # if the new value is less than or equal to the parent,
+        if child <= parent:
+            # switch the values
+            self.heapList[self.get_parent(index)] = child
+            self.heapList[index] = parent  
+        # then assert heap properties
+        self.build_min_heap()  
 
-    # delete key at index
-    # first reduce value to minus infinite 
-    # negative_infinity = float('-inf')
-    # then call extract_min 
+    # Add a new node at the end of the tree. 
+    # use decrease_key function to decrease to the value you want
+    # the decrease_key function will deal with moving to where it needs to be
+    def insert(self, value):
+        # get the last index
+        index = self.heapSize 
+        # add new node 
+        self.heapList.append(value) 
+        self.heapSize += 1
+        self.decrease_key(index, value)
+
+    # use decrease_key function to move the key to 0 with negative_infinity = float('-inf')
+    # then call extract_min
     def delete_key(self, index):
-        pass
+        self.decrease_key(index, float('-inf'))
+        self.extract_min()
+    
+    # enforces the properties of a min heap
+    def build_min_heap(self):
+        # loop starting at end array, working backwards
+        # skip the leaf nodes as they already conform to min_heapify conditions
+        index = (self.heapSize / 2) -1
+        while index >= 0: 
+            # call min_heapify on index 0 (by that point, both children are min heaps)
+            self.min_heapify(index)
+            index = index - 1
+    
+    # h/w complete max heap
+    # h/w write heap sort algorithm
+    # look at heap sort if time - efficient sorting algorithm
+    # repeatedly calling extract min and putting the result into an array
 
-myHeap = MinHeap([4,1,7,2,9])
+myHeap = MinHeap([4,1,7,2,9,3,5,17,6,11])
 print(myHeap)
-myHeap.min_heapify()
+myHeap.build_min_heap()
 print(myHeap)
-myHeap.insert(3)
+print(myHeap.extract_min())
 print(myHeap)
-myHeap.min_heapify() # this doesnt seem to be working
+myHeap.decrease_key(1, 1)
 print(myHeap)
-
+myHeap.insert(20)
+print(myHeap)
 
 
 
