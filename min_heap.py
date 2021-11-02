@@ -21,10 +21,10 @@ class MinHeap(object):
     def __str__(self):
         return str(self.heapList)
     
-    def get_left(self, index):
+    def get_left_child(self, index):
         return (index * 2) + 1
 
-    def get_right(self, index):
+    def get_right_child(self, index):
         return (index * 2) + 2
 
     def get_parent(self, index):
@@ -37,8 +37,8 @@ class MinHeap(object):
     # a condition of this function is that the left and right subtrees of index are already minHeaps
     # https://www.baeldung.com/cs/binary-tree-max-heapify
     def min_heapify(self, index=0):
-        leftIndex = self.get_left(index)
-        rightIndex = self.get_right(index)
+        leftIndex = self.get_left_child(index)
+        rightIndex = self.get_right_child(index)
         smallestIndex = index #setting it to index initially, will change if required
 
         # if left index is out of bounds, don't call for it's value!
@@ -110,10 +110,15 @@ class MinHeap(object):
             self.min_heapify(index)
             index = index - 1
     
+    # efficient sorting algorithm - repeatedly calls extract min and puts the result into an array
+    def heap_sort(self):
+        sortedHeap = []
+        for i in range(0, len(self.heapList)):
+            sortedHeap.append(self.extract_min())
+        return sortedHeap
+    
     # h/w complete max heap
     # h/w write heap sort algorithm
-    # look at heap sort if time - efficient sorting algorithm
-    # repeatedly calling extract min and putting the result into an array
 
 myHeap = MinHeap([4,1,7,2,9,3,5,17,6,11])
 print(myHeap)
@@ -125,6 +130,7 @@ myHeap.decrease_key(1, 1)
 print(myHeap)
 myHeap.insert(20)
 print(myHeap)
+print(myHeap.heap_sort())
 
 
 

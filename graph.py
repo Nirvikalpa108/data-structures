@@ -20,14 +20,14 @@ class Graph(object):
             if edge.a in nodes and edge.b in nodes:
                 pass
             else: 
-                raise Exception
+                raise ValueError("graph constructed with an edge that has not been identified as a node. Check your edges are correct.")
     
     def __str__(self):
         return "Nodes = " + str(self.nodes) + " Edges = " + str(self.edges)
 
     # h/w - complete heaps h/w (max heap and heap sort)
     # h/w - read about the traversals 
-    # h/w - exception should say "graph constructed with edge xx, but no such node found" / or easier - nice exception msg
+    # DONE - h/w - exception should say "graph constructed with edge xx, but no such node found" / or easier - nice exception msg
 
 myEdges = [Edge(1,2), Edge(2,3), Edge(3,1)]
 print(myEdges)
