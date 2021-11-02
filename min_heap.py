@@ -117,8 +117,8 @@ class MinHeap(object):
             sortedHeap.append(self.extract_min())
         return sortedHeap
     
-    # h/w complete max heap
-    # h/w write heap sort algorithm
+    # DONE h/w complete max heap
+    # DONE h/w write heap sort algorithm
 
 myHeap = MinHeap([4,1,7,2,9,3,5,17,6,11])
 print(myHeap)
